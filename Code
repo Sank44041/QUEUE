@@ -1,0 +1,109 @@
+#include <stdio.h>
+
+#define MAX_SIZE 100
+
+typedef struct {
+    int arr[MAX_SIZE];
+    int front;
+    int rear;
+} Queue;
+
+void initializeQueue(Queue* queue) {
+    queue->front = -1;
+    queue->rear = -1;
+}
+
+int isEmpty(Queue* queue) {
+    return queue->front == -1;
+}
+
+int isFull(Queue* queue) {
+    return queue->rear == MAX_SIZE - 1;
+}
+
+void enqueue(Queue* queue, int value) {
+    if (isFull(queue)) {
+        printf("Queue is full. Cannot enqueue.\n");
+        return;
+    }
+    if (isEmpty(queue)) {
+        queue->front = 0;
+    }
+    queue->rear++;
+    queue->arr[queue->rear] = value;
+    printf("Enqueued: %d\n", value);
+}
+
+void dequeue(Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty. Cannot dequeue.\n");
+        return;
+    }
+    if (queue->front == queue->rear) {
+        initializeQueue(queue);
+    } else {
+        printf("Dequeued: %d\n", queue->arr[queue->front]);
+        queue->front++;
+    }
+}
+
+int front(Queue* queue) {
+    if (isEmpty(queue)) {
+        printf("Queue is empty. Cannot get front element.\n");
+        return -1;
+    }
+    return queue->arr[queue->front];
+}
+
+int size(Queue* queue) {
+    if (isEmpty(queue)) {
+        return 0;
+    }
+    return queue->rear - queue->front + 1;
+}
+
+int main() {
+    Queue queue;
+    initializeQueue(&queue);
+
+    int choice, value;
+
+    do {
+        printf("\nQueue Menu:\n");
+        printf("1. Enqueue\n");
+        printf("2. Dequeue\n");
+        printf("3. Front\n");
+        printf("4. Is Empty\n");
+        printf("5. Size\n");
+        printf("0. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value to enqueue: ");
+                scanf("%d", &value);
+                enqueue(&queue, value);
+                break;
+            case 2:
+                dequeue(&queue);
+                break;
+            case 3:
+                printf("Front element: %d\n", front(&queue));
+                break;
+            case 4:
+                printf("Queue is %s\n", isEmpty(&queue) ? "empty" : "not empty");
+                break;
+            case 5:
+                printf("Queue size: %d\n", size(&queue));
+                break;
+            case 0:
+                printf("Exiting program.\n");
+                break;
+            default:
+                printf("Invalid choice. Please enter a valid option.\n");
+        }
+    } while (choice != 0);
+
+    return 0;
+}
